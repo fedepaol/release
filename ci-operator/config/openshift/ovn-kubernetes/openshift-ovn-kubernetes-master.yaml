@@ -69,6 +69,19 @@ tests:
   steps:
     cluster_profile: azure4
     workflow: openshift-e2e-azure-ovn
+- as: e2e-azure-custom-periodic
+  cron: 0 0 * * *
+  steps:
+    cluster_profile: azure4
+    workflow: openshift-e2e-azure-ovn
+    test:                     # this chain will be run for "test" instead of the one in the origin-e2e workflow
+    - as: e2e-test
+      commands: make e2e
+      from: src
+      resources:
+        requests:
+          cpu: 100m
+          memory: 200Mi    
 zz_generated_metadata:
   branch: master
   org: openshift
